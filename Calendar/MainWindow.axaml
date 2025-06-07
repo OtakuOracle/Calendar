@@ -1,0 +1,81 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:models="clr-namespace:Calendar.Models"
+        x:CompileBindings="False"
+        x:Class="Calendar.MainWindow"
+        mc:Ignorable="d"
+        Title="Сведения об организациях"
+        Width="1200" Height="1000">
+
+  <Grid>
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="*"/> 
+      <ColumnDefinition Width="300"/> 
+    </Grid.ColumnDefinitions>
+
+    <Grid Grid.Column="0" Margin="10">
+      <Grid.RowDefinitions>
+        <RowDefinition Height="Auto"/>
+        <RowDefinition Height="*"/>
+      </Grid.RowDefinitions>
+      <StackPanel Orientation="Horizontal" Spacing="10" Grid.Row="0">
+		  <Button Content="Добавить" Click="AddEmployee_Click"/>
+		  <TextBox x:Name="SearchBox" Width="300" Watermark="Поиск..." TextChanged="SearchBox_TextChanged"/>
+      </StackPanel>
+      <ListBox x:Name="EmployeeListBox"
+                     Grid.Row="1"
+                     Margin="0,10,0,0"
+                     ItemsSource="{Binding Employees}"
+                     DoubleTapped="EmployeeListBox_DoubleTapped">
+        <ListBox.ItemTemplate>
+          <DataTemplate>
+            <Border BorderBrush="LightGreen" BorderThickness="0 0 0 1" Padding="8">
+              <StackPanel>
+                <TextBlock>
+                  <Run Text="{Binding Lastname}"/>
+                  <Run Text=" "/>
+                  <Run Text="{Binding Firstname}"/>
+                  <Run Text=" "/>
+                  <Run Text="{Binding Middlename}"/>
+                </TextBlock>
+                <TextBlock>
+                  <Run Text="Должность: "/>
+                  <Run Text="{Binding Position.Positionname}"/>
+                </TextBlock>
+                <TextBlock>
+                  <Run Text="Тел.: "/>
+                  <Run Text="{Binding Worktel}"/>
+                </TextBlock>
+                <TextBlock>
+                  <Run Text="Эл.почта: "/>
+                  <Run Text="{Binding Email}"/>
+                </TextBlock>
+              </StackPanel>
+            </Border>
+          </DataTemplate>
+        </ListBox.ItemTemplate>
+      </ListBox>
+    </Grid>
+
+    <Border Grid.Column="1" BorderBrush="LightGreen" BorderThickness="0 0 1 0"> 
+      <DockPanel>
+        <TextBlock DockPanel.Dock="Top" Text="СИСТЕМА УПРАВЛЕНИЯ"
+                           Margin="10" FontSize="10" FontWeight="Normal"/>
+        <TreeView x:Name="DepartmentTree"
+                          ItemsSource="{Binding Departments}"
+                          SelectionChanged="DepartmentTree_SelectionChanged">
+          <TreeView.DataTemplates>
+            <TreeDataTemplate DataType="models:Department" ItemsSource="{Binding DepartmentSubdivisions}">
+              <TextBlock Text="{Binding Departmentname}"/>
+            </TreeDataTemplate>
+            <TreeDataTemplate DataType="models:DepartmentSubdivision">
+              <TextBlock Text="{Binding Subdivisionname}"/>
+            </TreeDataTemplate>
+          </TreeView.DataTemplates>
+        </TreeView>
+      </DockPanel>
+    </Border>
+  </Grid>
+</Window>
